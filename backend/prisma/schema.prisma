@@ -1,0 +1,71 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  disabled Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  person    Person?
+}
+
+model Person {
+  id            String       @id @default(cuid())
+  firstName     String
+  lastName      String
+  qrCode        String      @unique
+  profileImage  String?     
+  idCardImage   String?     
+  type          PersonType
+  userId        String      @unique
+  user          User        @relation(fields: [userId], references: [id])
+  accessLogs    AccessLog[]
+}
+
+model Location {
+  id         String      @id @default(uuid())
+  name       String
+  type       GateType
+  accessLogs AccessLog[]
+}
+
+model AccessLog {
+  id         String   @id @default(uuid())
+  personId   String
+  locationId String
+  type       LogType
+  timestamp  DateTime @default(now())
+  person     Person   @relation(fields: [personId], references: [id])
+  location   Location @relation(fields: [locationId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  SECURITY
+  USER
+}
+
+enum PersonType {
+  STUDENT
+  STAFF
+}
+
+enum GateType {
+  ENTRY
+  EXIT
+}
+
+enum LogType {
+  CHECKIN
+  CHECKOUT
+  BREACH
+}
