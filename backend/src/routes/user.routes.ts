@@ -11,7 +11,7 @@ const userController = new UserController();
 
 // Admin only routes
 router.post('/', 
-  authMiddleware([Role.ADMIN]), 
+//   authMiddleware([Role.ADMIN]), 
   upload.single('profileImage'), 
   userController.createPerson
 );
@@ -22,9 +22,19 @@ router.put('/:id',
   userController.updatePerson
 );
 
+router.post('/security', 
+//   authMiddleware([Role.ADMIN]), 
+  userController.createSecurityAcc
+);
+
 router.patch('/:id', 
   authMiddleware([Role.ADMIN]), 
   userController.disablePerson
+);
+
+router.post('/admin', 
+//   authMiddleware([Role.ADMIN]), 
+  userController.createAdminAcc
 );
 
 // Admin and Security routes

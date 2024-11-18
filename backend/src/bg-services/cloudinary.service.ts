@@ -1,24 +1,39 @@
-// src/bg-services/cloudinary.service.ts
 import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import multer from 'multer';
 
-export class CloudinaryService {
-  constructor() {
-    cloudinary.config({
-      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-      api_key: process.env.CLOUDINARY_API_KEY,
-      api_secret: process.env.CLOUDINARY_API_SECRET
-    });
-  }
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_SECRET_KEY
+});
 
-  async uploadImage(file: Express.Multer.File): Promise<string> {
-    try {
-      const result = await cloudinary.uploader.upload(file.path, {
-        folder: 'idsys',
-        resource_type: 'auto'
-      });
-      return result.secure_url;
-    } catch (error) {
-      throw new Error('Failed to upload image');
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'idsys',
+    allowed_formats: ['jpg', 'png', 'jpeg'],
+    transformation: [{ width: 500, height: 500, crop: 'limit' }]
+  }as any
+});
+
+export const upload = multer({ storage: storage });
+
+export const uploadToCloudinary = async (file: Express.Multer.File): Promise<string> => {
+  try {
+    if (!file || !file.path) {
+      throw new Error('No file uploaded');
     }
+
+    const result = await cloudinary.uploader.upload(file.path, {
+      folder: 'idsys',
+      allowed_formats: ['jpg', 'png', 'jpeg'],
+      transformation: [{ width: 500, height: 500, crop: 'limit' }]
+    });
+
+    return result.secure_url;
+  } catch (error) {
+    console.error('Error uploading to Cloudinary:', error);
+    throw new Error('Failed to upload image');
   }
-}
+};

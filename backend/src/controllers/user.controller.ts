@@ -21,6 +21,27 @@ export class UserController {
     }
   };
 
+  createSecurityAcc = async (req: Request, res: Response) => {
+    try {
+      const security = await this.userService.createSecurityAcc({
+        ...req.body,
+      });
+      res.status(201).json({security, message: 'Security account created successfully.' });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+  createAdminAcc = async (req: Request, res: Response) => {
+    try {
+      const admin = await this.userService.createAdminAcc({
+        ...req.body,
+      });
+      res.status(201).json({admin, message: 'Admin account created successfully.' });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
   getAllPersons = async (req: Request, res: Response) => {
     try {
       const persons = await this.userService.getAllPersons();

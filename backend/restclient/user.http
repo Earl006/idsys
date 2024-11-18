@@ -1,0 +1,91 @@
+@baseUrl = http://localhost:3000/api
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmYmQyM2JhZi0wYWJiLTRkYzUtYWQwOC0xZDlmZWY4ZmVkNTAiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MzE4ODkxNjEsImV4cCI6MTczMTkxNzk2MX0.g7MDpyCsPJsfsovG75n-w8DEtWY46k0OwTGdOATcV10
+
+
+# Create new person (Admin only)
+POST {{baseUrl}}/users
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+
+------WebKitFormBoundary
+Content-Disposition: form-data; name="email"
+
+student1@school.com
+------WebKitFormBoundary
+Content-Disposition: form-data; name="password"
+
+student123
+------WebKitFormBoundary
+Content-Disposition: form-data; name="firstName"
+
+John
+------WebKitFormBoundary
+Content-Disposition: form-data; name="lastName"
+
+Doe
+------WebKitFormBoundary
+Content-Disposition: form-data; name="type"
+
+STUDENT
+------WebKitFormBoundary
+Content-Disposition: form-data; name="profileImage"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< /home/earljoe/Downloads/clubMbuzi.png
+------WebKitFormBoundary--
+
+### Create security person (Admin only)
+POST {{baseUrl}}/users/security
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+    {
+        "email": "security@school.com",
+        "password": "security123",
+        "firstName": "Ron",
+        "lastName": "Pearson"
+    }
+
+
+### Create Admin Account (Admin only)
+POST {{baseUrl}}/users/admin
+Authorization: Bearer {{token}}
+Content-Type: application/json
+    
+    {
+        "email": "admin@school.com",
+        "password": "admin123",
+        "firstName": "John",
+        "lastName": "Rolands"
+    }
+### Get all persons (Admin & Security)
+GET {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+### Get person by ID
+GET {{baseUrl}}/users/cm3m9i1uy0000e3ibnzwtstht
+Authorization: Bearer {{token}}
+
+### Get persons by type
+GET {{baseUrl}}/users/type/STAFF
+Authorization: Bearer {{token}}
+
+### Update person (Admin only)
+PUT {{baseUrl}}/users/cm3m9zk94000146j63a6o1480
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+
+------WebKitFormBoundary
+Content-Disposition: form-data; name="firstName"
+
+Jane
+------WebKitFormBoundary
+Content-Disposition: form-data; name="lastName"
+
+Smith
+------WebKitFormBoundary--
+
+### Disable person (Admin only)
+PATCH {{baseUrl}}/users/cm3ma53130002j1xcqtya8my2
+Authorization: Bearer {{token}}

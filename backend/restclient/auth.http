@@ -1,0 +1,22 @@
+/ src/tests/api.rest
+
+### Environment Variables
+@baseUrl = http://localhost:3000/api
+
+### Auth Tests
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@school.com",
+    "password": "admin123"
+}
+### Security Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "security@school.com",
+    "password": "security123"
+}
