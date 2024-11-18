@@ -1,0 +1,23 @@
+// src/tests/verify.http
+@baseUrl = http://localhost:3000/api
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiNjhhNGMxNi1jYmMzLTRhNTYtYWI1Yi1hZTkzYjdlZTU2MzUiLCJyb2xlIjoiU0VDVVJJVFkiLCJpYXQiOjE3MzE4OTI0NDksImV4cCI6MTczMTkyMTI0OX0.nWrZnF3YhVcaWpOUzP0iXhtDruWkIO86yQzciD1gMuI
+
+### Login as Security
+# @name loginSecurity
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "security@school.com",
+    "password": "security123"
+}
+
+### Verify Person (Security only)
+POST {{baseUrl}}/verify/scan
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "personId": "cm3ma53130002j1xcqtya8my2"
+}

@@ -16,6 +16,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   person    Person?
+  assignedLocation Location? @relation("SecurityLocation")
 }
 
 model Person {
@@ -32,20 +33,30 @@ model Person {
 }
 
 model Location {
-  id         String      @id @default(uuid())
-  name       String
-  type       GateType
-  accessLogs AccessLog[]
+  id          String      @id @default(uuid())
+  name        String
+  type        GateType
+  securityId  String?     @unique  // Optional to allow unassigned locations
+  security    User?       @relation("SecurityLocation", fields: [securityId], references: [id])
+  accessLogs  AccessLog[]
 }
 
 model AccessLog {
-  id         String   @id @default(uuid())
-  personId   String
+
+  id        String   @id @default(uuid())
+
+  person    Person?  @relation(fields: [personId], references: [id])
+
+  personId  String?
+
+  location  Location @relation(fields: [locationId], references: [id])
+
   locationId String
-  type       LogType
-  timestamp  DateTime @default(now())
-  person     Person   @relation(fields: [personId], references: [id])
-  location   Location @relation(fields: [locationId], references: [id])
+
+  type      LogType
+
+  timestamp DateTime @default(now())
+
 }
 
 enum Role {

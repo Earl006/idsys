@@ -1,0 +1,52 @@
+// src/tests/locations.http
+@baseUrl = http://localhost:3000/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmYmQyM2JhZi0wYWJiLTRkYzUtYWQwOC0xZDlmZWY4ZmVkNTAiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MzE4OTI5NDEsImV4cCI6MTczMTkyMTc0MX0.BYN89R3nytkaG2bjrChD_0qXXV0cKLGdKNyd478vq1I
+
+### Login as Admin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@school.com",
+    "password": "admin123"
+}
+
+### Create Location (Admin only)
+POST {{baseUrl}}/locations
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "Gate A",
+    "type": "ENTRY"
+}
+
+### Get All Locations (Admin & Security)
+GET {{baseUrl}}/locations
+Authorization: Bearer {{token}}
+
+### Get Location Logs
+GET {{baseUrl}}/locations/ad6df3c1-0a59-416e-8c05-8dd5f8ce9b94/logs
+Authorization: Bearer {{token}}
+
+### Get Location Logs with Date
+GET {{baseUrl}}/locations/location_id_here/logs?date=2024-11-18
+Authorization: Bearer {{token}}
+
+### Get Breach Logs
+GET {{baseUrl}}/locations/breaches
+Authorization: Bearer {{token}}
+
+### Assign Security to Location (Admin only)
+POST {{baseUrl}}/locations/assign
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "locationId": "ad6df3c1-0a59-416e-8c05-8dd5f8ce9b94",
+    "securityId": "b68a4c16-cbc3-4a56-ab5b-ae93b7ee5635"
+}
+
+### Unassign Security from Location (Admin only)
+DELETE {{baseUrl}}/locations/location_id_here/security
+Authorization: Bearer {{token}}
